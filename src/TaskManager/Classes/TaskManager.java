@@ -1,5 +1,7 @@
 package TaskManager.Classes;
 
+import TaskManager.Classes.Exceptions.TaskManipulationException;
+
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +23,14 @@ public class TaskManager {
 
     public static void removeTask(Task task) {
         currentTasks.remove(task);
+    }
+
+    public static void removeTaskByID(int ID) {
+        Optional<Task> taskToRemove = getTaskById(ID);
+        if (taskToRemove.isEmpty()) {
+            throw new TaskManipulationException("Task not found");
+        }
+        taskToRemove.ifPresent(task -> currentTasks.remove(task));
     }
 
     public static void removeTasks(ArrayList<Task> tasks) {

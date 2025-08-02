@@ -1,5 +1,6 @@
 package TaskManager;
 
+import TaskManager.Classes.Exceptions.TaskManipulationException;
 import TaskManager.Classes.TASK_DATA;
 import TaskManager.Classes.Task;
 import TaskManager.Classes.TaskManager;
@@ -75,7 +76,50 @@ public class Runner {
     }
 
     private static void RemoveTask() {
-        System.out.println("Incomplete!");
+        Scanner scanner = new Scanner(System.in);
+        String Input;
+        int InputID = 0;
+        boolean validID = false;
+
+        do {
+            System.out.println(MenuUtils.getShowTasks());
+            System.out.println(MenuUtils.getRemoveTask());
+            Input = scanner.nextLine().strip();
+
+            /* Add quitting from menu options
+            if (Input.equalsIgnoreCase("q")) {
+                System.out.println("Aborting ");
+            }
+            */
+            try{
+                InputID = Integer.parseInt(Input);
+            }
+            catch (NumberFormatException e){
+                System.out.println("Invalid input! Non-numeric arguments!\nPress any key to continue");
+                scanner.nextLine();
+                continue;
+            }
+
+            if (TaskManager.getTaskById(InputID).isEmpty()) {
+                System.out.println("Task does not exist!\nPress any key to continue");
+                scanner.nextLine();
+                continue;
+            }
+            validID = true;
+        }
+        while (!validID);
+
+        try {
+            TaskManager.removeTaskByID(InputID);
+            System.out.println("Task removed successfully!\nPress any key to continue");
+            scanner.nextLine();
+        }
+        catch (TaskManipulationException e){
+            System.out.println("Remove task failed!\nPress any key to continue");
+            scanner.nextLine();
+        }
+
+
     }
 
     private static void EditTask() {
